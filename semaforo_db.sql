@@ -1,0 +1,21 @@
+
+CREATE DATABASE IF NOT EXISTS semaforo_db;
+USE semaforo_db;
+
+CREATE TABLE IF NOT EXISTS compromisos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    compromiso_especifico TEXT NOT NULL,
+    direccion_responsable VARCHAR(255) NOT NULL,
+    evidencia_pdf VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS bitacora (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    compromiso_id INT NOT NULL,
+    direccion_responsable VARCHAR(255) NOT NULL,
+    accion VARCHAR(50) NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (compromiso_id) REFERENCES compromisos(id) ON DELETE CASCADE
+);
