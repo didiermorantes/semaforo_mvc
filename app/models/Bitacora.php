@@ -49,4 +49,13 @@ class Bitacora
         }
         return $bitacora;
     }
+
+    // Método registrar: para auditoría
+    public function registrar($compromisoId, $direccion, $accion)
+    {
+        $stmt = $this->conn->prepare("INSERT INTO bitacora (compromiso_id, direccion_responsable, accion, fecha) VALUES (?, ?, ?, NOW())");
+        $stmt->bind_param("iss", $compromisoId, $direccion, $accion);
+        $stmt->execute();
+        $stmt->close();
+    }
 }

@@ -8,20 +8,24 @@
 </head>
 <body class="bg-light p-4">
 
-<!-- Barra de filtros de la bitácora -->
-<form method="GET" action="" class="d-flex align-items-center mb-3">
-  <input type="hidden" name="route" value="bitacora/index">
-  <input type="text" name="filtro" placeholder="Filtrar por responsable..." class="form-control me-2" value="<?= isset($_GET['filtro']) ? htmlspecialchars($_GET['filtro']) : '' ?>">
-  <button type="submit" class="btn btn-outline-primary me-2">Filtrar</button>
-</form>
-
-<!-- Botón de exportar PDF (siempre lleva el filtro actual) -->
-<form method="GET" action="<?= BASE_URL ?>/exportar_pdf.php" class="d-inline mb-3">
-    <input type="hidden" name="filtro" value="<?= isset($_GET['filtro']) ? htmlspecialchars($_GET['filtro']) : '' ?>">
-    <button type="submit" class="btn btn-success">Exportar PDF</button>
-</form>
-
 <div class="container">
+  <!-- Barra de filtros y exportación PDF en una sola fila -->
+  <div class="row mb-3">
+    <div class="col">
+      <form method="GET" action="" class="d-flex gap-2 align-items-center">
+        <input type="hidden" name="route" value="bitacora/index">
+        <input type="text" name="filtro" placeholder="Filtrar por responsable..." class="form-control" value="<?= isset($_GET['filtro']) ? htmlspecialchars($_GET['filtro']) : '' ?>">
+        <button type="submit" class="btn btn-outline-primary">Filtrar</button>
+      </form>
+    </div>
+    <div class="col-auto">
+      <form method="GET" action="<?= BASE_URL ?>/exportar_pdf.php" class="d-flex">
+          <input type="hidden" name="filtro" value="<?= isset($_GET['filtro']) ? htmlspecialchars($_GET['filtro']) : '' ?>">
+          <button type="submit" class="btn btn-success">Exportar PDF</button>
+      </form>
+    </div>
+  </div>
+
   <h3 class="mb-4">📘 Bitácora de Cambios</h3>
 
   <a href="<?= BASE_URL ?>/?route=compromisos/index" class="btn btn-secondary mb-3">← Volver</a>
