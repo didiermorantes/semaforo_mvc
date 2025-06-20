@@ -32,25 +32,54 @@
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
-      <?php foreach ($compromisos as $c): ?>
-        <tr>
-          <td><?= $c['id'] ?></td>
-          <td><?= htmlspecialchars($c['compromiso_especifico']) ?></td>
-          <td><?= htmlspecialchars($c['direccion_responsable']) ?></td>
-          <td>
-            <?php if ($c['evidencia_pdf']): ?>
-              <a href="<?= BASE_URL ?>/uploads/<?= $c['evidencia_pdf'] ?>" target="_blank">📄 Ver PDF</a>
-            <?php else: ?>
-              Sin archivo
-            <?php endif; ?>
-          </td>
-          <td>
-            <a href="<?= BASE_URL ?>/?route=compromisos/edit&id=<?= $c['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
-          </td>
-        </tr>
-      <?php endforeach; ?>
-      </tbody>
+<tbody>
+<?php if (!empty($compromisos) && is_array($compromisos)): ?>
+    <?php foreach ($compromisos as $c): ?>
+      <tr>
+        <td><?= $c['id'] ?></td>
+        <td><?= htmlspecialchars($c['compromiso_especifico']) ?></td>
+        <td><?= htmlspecialchars($c['direccion_responsable']) ?></td>
+        <td>
+          <?php if (!empty($c['evidencia_pdf'])): ?>
+            <a href="<?= BASE_URL ?>/uploads/<?= $c['evidencia_pdf'] ?>" target="_blank">📄 Ver PDF</a>
+          <?php else: ?>
+            Sin archivo
+          <?php endif; ?>
+        </td>
+        <td>
+          <!-- Semaforización: Verde si finalizado, Rojo si no -->
+          <?php if (!empty($c['finalizado']) && $c['finalizado']): ?>
+            <span class="badge bg-success px-3 py-2">✔️ Finalizado</span>
+          <?php else: ?>
+            <span class="badge bg-danger px-3 py-2">Pendiente</span>
+          <?php endif; ?>
+
+          <?php if (
+              $_SESSION['direccion'] !== 'Administrador'
+              && (
+                  empty($c['finalizado'])
+                  || !$c['finalizado']
+              )
+          ): ?>
+            <a href="<?= BASE_URL ?>/?route=avances/formulario&compromiso_id=<?= $c['id'] ?>" class="btn btn-primary btn-sm ms-2">
+              Registrar Avance
+            </a>
+          <?php endif; ?>
+
+          <!-- Admin puede seguir editando si así lo decides -->
+          <?php if ($_SESSION['direccion'] === 'Administrador'): ?>
+            <a href="<?= BASE_URL ?>/?route=compromisos/edit&id=<?= $c['id'] ?>" class="btn btn-warning btn-sm ms-2">Editar</a>
+          <?php endif; ?>
+        </td>
+      </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+      <td colspan="5" class="text-center">No hay compromisos registrados.</td>
+    </tr>
+<?php endif; ?>
+</tbody>
+
     </table>
   </div>
 </div>

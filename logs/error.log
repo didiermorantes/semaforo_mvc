@@ -4,3 +4,25 @@
 [2025-06-17 21:20:49] Excepción no controlada: Call to undefined method Compromiso::obtenerPorDireccion()
 [2025-06-17 21:20:55] Excepción no controlada: Call to undefined method Compromiso::obtenerPorDireccion()
 [2025-06-17 21:20:59] Excepción no controlada: Call to undefined method Compromiso::obtenerPorDireccion()
+[2025-06-20 18:51:02] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 18:51:06] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 18:51:15] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 18:51:17] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 18:51:24] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\edit.php línea 23
+[2025-06-20 18:51:24] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\edit.php línea 27
+[2025-06-20 18:51:27] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 18:55:12] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 18:55:14] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 18:55:39] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 18:57:05] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 19:08:45] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 19:08:50] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 19:22:10] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 19:22:11] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 19:22:15] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 19:22:18] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 19:22:25] Error: Undefined array key "evidencia_pdf" en C:\xampp\htdocs\semaforo_mvc\app\views\compromisos\index.php línea 42
+[2025-06-20 20:32:27] Excepción no controlada: Class "AvanceController" not found
+[2025-06-20 20:32:30] Excepción no controlada: Class "AvanceController" not found
+[2025-06-20 20:32:55] Excepción no controlada: Class "AvanceController" not found
+[2025-06-20 20:33:35] Excepción no controlada: Class "AvanceController" not found

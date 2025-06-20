@@ -9,19 +9,29 @@
 <body class="bg-light p-4">
 <div class="container">
   <h4 class="mb-4">Nuevo Compromiso</h4>
-  <form method="POST" enctype="multipart/form-data" class="border p-4 bg-white rounded shadow-sm">
+  <form method="POST" class="border p-4 bg-white rounded shadow-sm">
     <div class="mb-3">
       <label class="form-label">Compromiso</label>
       <textarea name="compromiso" class="form-control" required></textarea>
     </div>
-    <div class="mb-3">
-      <label class="form-label">Dirección</label>
-      <input type="text" name="direccion" class="form-control" value="<?= $_SESSION['direccion'] ?>" readonly>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Archivo PDF</label>
-      <input type="file" name="pdf" class="form-control" accept="application/pdf">
-    </div>
+
+    <?php if ($_SESSION['direccion'] === 'Administrador'): ?>
+      <div class="mb-3">
+        <label class="form-label">Asignar a Dirección Responsable</label>
+        <select name="direccion" class="form-select" required>
+          <option value="">Seleccione una dirección</option>
+          <?php foreach ($direcciones_responsables as $dir): ?>
+            <option value="<?= htmlspecialchars($dir) ?>"><?= htmlspecialchars($dir) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+    <?php else: ?>
+      <div class="mb-3">
+        <label class="form-label">Dirección</label>
+        <input type="text" name="direccion" class="form-control" value="<?= htmlspecialchars($_SESSION['direccion']) ?>" readonly>
+      </div>
+    <?php endif; ?>
+
     <button class="btn btn-success">Guardar</button>
     <a href="<?= BASE_URL ?>/?route=compromisos/index" class="btn btn-secondary ms-2">Cancelar</a>
   </form>
