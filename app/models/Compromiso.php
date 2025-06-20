@@ -31,6 +31,7 @@ public function obtenerTodos() {
         $stmt = $this->db->prepare("SELECT * FROM compromisos WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
+        // error_log("DEBUG obtenerPorId - ID: $id - Resultado: " . print_r($res, true)); // debug
         return $stmt->get_result()->fetch_assoc();
     }
 

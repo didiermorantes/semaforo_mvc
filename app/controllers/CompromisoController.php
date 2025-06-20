@@ -12,7 +12,6 @@ class CompromisoController {
 public function index() {
     if (session_status() === PHP_SESSION_NONE) session_start();
 
-    // Validación recomendada:
     if (!isset($_SESSION['direccion']) || empty($_SESSION['direccion'])) {
         $_SESSION['mensaje_error'] = 'Debes iniciar sesión para ver esta sección.';
         header("Location: ?route=auth/login");
@@ -20,15 +19,26 @@ public function index() {
     }
 
     $direccion = $_SESSION['direccion'];
+    $direcciones_responsables = [
+        "Administrativa y Financiera", "Buen Gobierno", "Calidad Educativa", "Cobertura Educativa",
+        "Despacho", "Educación Superior", "Infraestructura Educativa", "Medios y Nuevas Tecnologías",
+        "Oficina Asesora de Planeación", "Oficina Asesora Jurídica", "Personal Docente", "Subsecretaría", "Transporte"
+    ];
 
-    // Si es admin ve todos, si no solo los suyos
     if ($direccion === 'Administrador') {
-        $compromisos = $this->modelo->obtenerTodos();
+        // Filtro por dirección
+        $filtro_dir = isset($_GET['filtro_direccion']) ? trim($_GET['filtro_direccion']) : '';
+        if ($filtro_dir) {
+            $compromisos = $this->modelo->obtenerPorDireccion($filtro_dir);
+        } else {
+            $compromisos = $this->modelo->obtenerTodos();
+        }
     } else {
         $compromisos = $this->modelo->obtenerPorDireccion($direccion);
     }
     require __DIR__ . '/../views/compromisos/index.php';
 }
+
 
     public function create() {
         if (session_status() === PHP_SESSION_NONE) session_start();

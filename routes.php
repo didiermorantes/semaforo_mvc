@@ -67,6 +67,18 @@ case 'avances/guardar':
     }
     break;
 
+    case 'avances/timeline':
+    require_once __DIR__ . '/app/controllers/AvanceController.php';
+    $controller = new AvanceController();
+    $compromiso_id = $_GET['compromiso_id'] ?? null;
+    if ($compromiso_id) {
+        $controller->verHistorial($compromiso_id);
+    } else {
+        header('Location: ?route=error');
+    }
+    break;
+    
+
     case 'error':
         include __DIR__ . '/app/views/error.php';
         break;

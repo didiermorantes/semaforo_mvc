@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS avances (
     id INT AUTO_INCREMENT PRIMARY KEY,
     compromiso_id INT NOT NULL,
     resumen TEXT NOT NULL,
+    porcentaje_avance INT DEFAULT NULL,
     usuario VARCHAR(100) NOT NULL,
     fecha_avance DATETIME DEFAULT CURRENT_TIMESTAMP,
     es_finalizacion TINYINT(1) DEFAULT 0, -- 0: avance, 1: es la finalización

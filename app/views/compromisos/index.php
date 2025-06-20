@@ -21,6 +21,27 @@
     <?php endif; ?>
   </div>
 
+  <?php if ($_SESSION['direccion'] === 'Administrador'): ?>
+    <!-- Filtro por dirección -->
+    <form class="row mb-3" method="get" action="">
+      <input type="hidden" name="route" value="compromisos/index">
+      <div class="col-auto">
+        <select name="filtro_direccion" class="form-select">
+          <option value="">-- Filtrar por dirección --</option>
+          <?php foreach ($direcciones_responsables as $dir): ?>
+            <option value="<?= htmlspecialchars($dir) ?>"
+              <?= isset($_GET['filtro_direccion']) && $_GET['filtro_direccion'] === $dir ? 'selected' : '' ?>>
+              <?= htmlspecialchars($dir) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+      </div>
+    </form>
+  <?php endif; ?>
+
   <div class="table-responsive">
     <table class="table table-bordered table-hover align-middle">
       <thead class="table-primary">
@@ -29,6 +50,7 @@
           <th>Compromiso</th>
           <th>Dirección</th>
           <th>PDF</th>
+          <th>Estado</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -47,13 +69,13 @@
           <?php endif; ?>
         </td>
         <td>
-          <!-- Semaforización: Verde si finalizado, Rojo si no -->
           <?php if (!empty($c['finalizado']) && $c['finalizado']): ?>
             <span class="badge bg-success px-3 py-2">✔️ Finalizado</span>
           <?php else: ?>
             <span class="badge bg-danger px-3 py-2">Pendiente</span>
           <?php endif; ?>
-
+        </td>
+        <td>
           <?php if (
               $_SESSION['direccion'] !== 'Administrador'
               && (
@@ -66,20 +88,32 @@
             </a>
           <?php endif; ?>
 
-          <!-- Admin puede seguir editando si así lo decides -->
+          
+          <?php if (
+              $_SESSION['direccion'] !== 'Administrador'
+          ): ?>
+              <a href="<?= BASE_URL ?>/?route=avances/timeline&compromiso_id=<?= $c['id'] ?>" class="btn btn-info btn-sm ms-2">
+                  Ver avances
+              </a>
+          <?php endif; ?>
+
+
+
           <?php if ($_SESSION['direccion'] === 'Administrador'): ?>
             <a href="<?= BASE_URL ?>/?route=compromisos/edit&id=<?= $c['id'] ?>" class="btn btn-warning btn-sm ms-2">Editar</a>
+            <a href="<?= BASE_URL ?>/?route=avances/timeline&compromiso_id=<?= $c['id'] ?>" class="btn btn-info btn-sm ms-2">
+              Ver historial
+            </a>
           <?php endif; ?>
         </td>
       </tr>
     <?php endforeach; ?>
 <?php else: ?>
     <tr>
-      <td colspan="5" class="text-center">No hay compromisos registrados.</td>
+      <td colspan="6" class="text-center">No hay compromisos registrados.</td>
     </tr>
 <?php endif; ?>
 </tbody>
-
     </table>
   </div>
 </div>
