@@ -12,45 +12,90 @@ class Bitacora
         }
     }
 
+    // === 1. Todas las entradas ===
     public function obtenerTodas()
     {
-        $stmt = $this->conn->prepare("SELECT * FROM bitacora ORDER BY fecha DESC");
+        $sql = "SELECT * FROM bitacora ORDER BY fecha DESC";
+        $stmt = $this->conn->prepare($sql);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $bitacora = [];
-        while ($row = $result->fetch_assoc()) {
-            $bitacora[] = $row;
+        $stmt->store_result();
+
+        $meta = $stmt->result_metadata();
+        $fields = [];
+        while ($field = $meta->fetch_field()) {
+            $fields[] = &$row[$field->name];
         }
+        call_user_func_array([$stmt, 'bind_result'], $fields);
+
+        $bitacora = [];
+        while ($stmt->fetch()) {
+            $registro = [];
+            foreach ($row as $key => $val) {
+                $registro[$key] = $val;
+            }
+            $bitacora[] = $registro;
+        }
+        $stmt->close();
         return $bitacora;
     }
 
+    // === 2. Entradas por dirección ===
     public function obtenerPorDireccion($direccion)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM bitacora WHERE direccion_responsable = ? ORDER BY fecha DESC");
+        $sql = "SELECT * FROM bitacora WHERE direccion_responsable = ? ORDER BY fecha DESC";
+        $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('s', $direccion);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $bitacora = [];
-        while ($row = $result->fetch_assoc()) {
-            $bitacora[] = $row;
+        $stmt->store_result();
+
+        $meta = $stmt->result_metadata();
+        $fields = [];
+        while ($field = $meta->fetch_field()) {
+            $fields[] = &$row[$field->name];
         }
+        call_user_func_array([$stmt, 'bind_result'], $fields);
+
+        $bitacora = [];
+        while ($stmt->fetch()) {
+            $registro = [];
+            foreach ($row as $key => $val) {
+                $registro[$key] = $val;
+            }
+            $bitacora[] = $registro;
+        }
+        $stmt->close();
         return $bitacora;
     }
 
+    // === 3. Filtro tipo LIKE ===
     public function filtrarPorDireccion($filtro)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM bitacora WHERE direccion_responsable LIKE CONCAT('%', ?, '%') ORDER BY fecha DESC");
+        $sql = "SELECT * FROM bitacora WHERE direccion_responsable LIKE CONCAT('%', ?, '%') ORDER BY fecha DESC";
+        $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('s', $filtro);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $bitacora = [];
-        while ($row = $result->fetch_assoc()) {
-            $bitacora[] = $row;
+        $stmt->store_result();
+
+        $meta = $stmt->result_metadata();
+        $fields = [];
+        while ($field = $meta->fetch_field()) {
+            $fields[] = &$row[$field->name];
         }
+        call_user_func_array([$stmt, 'bind_result'], $fields);
+
+        $bitacora = [];
+        while ($stmt->fetch()) {
+            $registro = [];
+            foreach ($row as $key => $val) {
+                $registro[$key] = $val;
+            }
+            $bitacora[] = $registro;
+        }
+        $stmt->close();
         return $bitacora;
     }
 
-    // Método registrar: para auditoría
+    // === 4. Registrar nueva entrada ===
     public function registrar($compromisoId, $direccion, $accion)
     {
         $stmt = $this->conn->prepare("INSERT INTO bitacora (compromiso_id, direccion_responsable, accion, fecha) VALUES (?, ?, ?, NOW())");

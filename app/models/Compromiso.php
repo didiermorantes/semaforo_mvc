@@ -12,27 +12,69 @@ class Compromiso {
     }
 
     // Obtiene todos los compromisos de una dirección (usuario responsable)
-public function obtenerPorDireccion($direccion) {
-    $stmt = $this->db->prepare("SELECT * FROM compromisos WHERE direccion_responsable = ?");
-    $stmt->bind_param("s", $direccion);
-    $stmt->execute();
-    $res = $stmt->get_result();
-    return $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
-}
+    public function obtenerPorDireccion($direccion) {
+        $stmt = $this->db->prepare("SELECT * FROM compromisos WHERE direccion_responsable = ?");
+        $stmt->bind_param("s", $direccion);
+        $stmt->execute();
+        $stmt->store_result();
+
+        $meta = $stmt->result_metadata();
+        $fields = [];
+        while ($field = $meta->fetch_field()) {
+            $fields[] = &$row[$field->name];
+        }
+
+        call_user_func_array([$stmt, 'bind_result'], $fields);
+
+        $resultados = [];
+        while ($stmt->fetch()) {
+            $registro = [];
+            foreach ($row as $key => $val) {
+                $registro[$key] = $val;
+            }
+            $resultados[] = $registro;
+        }
+        $stmt->close();
+        return $resultados;
+    }
 
     // Obtiene todos los compromisos (para el panel del administrador)
-public function obtenerTodos() {
-    $res = $this->db->query("SELECT * FROM compromisos");
-    return $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
-}
+    public function obtenerTodos() {
+        $resultados = [];
+        $res = $this->db->query("SELECT * FROM compromisos");
+        if ($res) {
+            while ($row = $res->fetch_assoc()) {
+                $resultados[] = $row;
+            }
+            $res->free();
+        }
+        return $resultados;
+    }
 
     // Obtiene los datos de un compromiso específico
     public function obtenerPorId($id) {
         $stmt = $this->db->prepare("SELECT * FROM compromisos WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
-        // error_log("DEBUG obtenerPorId - ID: $id - Resultado: " . print_r($res, true)); // debug
-        return $stmt->get_result()->fetch_assoc();
+        $stmt->store_result();
+
+        $meta = $stmt->result_metadata();
+        $fields = [];
+        while ($field = $meta->fetch_field()) {
+            $fields[] = &$row[$field->name];
+        }
+
+        call_user_func_array([$stmt, 'bind_result'], $fields);
+
+        $registro = null;
+        if ($stmt->fetch()) {
+            $registro = [];
+            foreach ($row as $key => $val) {
+                $registro[$key] = $val;
+            }
+        }
+        $stmt->close();
+        return $registro;
     }
 
     // Crea un nuevo compromiso (por el Administrador)
