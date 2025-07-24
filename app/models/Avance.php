@@ -6,6 +6,7 @@ class Avance {
 
     public function __construct() {
         $this->db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $this->db->set_charset('utf8mb4');
     }
 
     public function registrarAvance($compromiso_id, $resumen, $usuario, $es_finalizacion = 0, $pdf_finalizacion = null, $porcentaje_avance = null) {

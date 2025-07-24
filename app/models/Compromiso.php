@@ -8,6 +8,7 @@ class Compromiso {
 
     public function __construct() {
         $this->db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $this->db->set_charset('utf8mb4');
         $this->bitacora = new Bitacora();
     }
 
@@ -78,32 +79,35 @@ class Compromiso {
     }
 
     // Crea un nuevo compromiso (por el Administrador)
-    public function crear($compromiso, $direccion) {
-        $stmt = $this->db->prepare("INSERT INTO compromisos (compromiso_especifico, direccion_responsable) VALUES (?, ?)");
-        $stmt->bind_param("ss", $compromiso, $direccion);
-        $stmt->execute();
-        $idInsertado = $this->db->insert_id;
-        $stmt->close();
+// Método para crear un nuevo compromiso con fecha límite
+public function crear($compromiso, $direccion, $fecha_limite) {
+    $stmt = $this->db->prepare("INSERT INTO compromisos (compromiso_especifico, direccion_responsable, fecha_limite) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $compromiso, $direccion, $fecha_limite);
+    $stmt->execute();
+    $idInsertado = $this->db->insert_id;
+    $stmt->close();
 
-        // Registrar en la bitácora como "Creado"
-        $this->bitacora->registrar($idInsertado, $direccion, "Creado");
+    // Registrar en la bitácora como "Creado"
+    $this->bitacora->registrar($idInsertado, $direccion, "Creado");
 
-        return $idInsertado;
-    }
+    return $idInsertado;
+}
 
     // Actualiza un compromiso (sólo si la lógica lo requiere; puedes usar para editar texto)
-    public function actualizar($id, $compromiso) {
-        $registro = $this->obtenerPorId($id);
-        $direccion = $registro ? $registro['direccion_responsable'] : '';
+// Método para actualizar un compromiso (incluyendo fecha límite)
+public function actualizar($id, $compromiso, $direccion, $fecha_limite) {
+    $registro = $this->obtenerPorId($id);
+    $direccion_anterior = $registro ? $registro['direccion_responsable'] : '';
 
-        $stmt = $this->db->prepare("UPDATE compromisos SET compromiso_especifico = ? WHERE id = ?");
-        $stmt->bind_param("si", $compromiso, $id);
-        $stmt->execute();
-        $stmt->close();
+    $stmt = $this->db->prepare("UPDATE compromisos SET compromiso_especifico = ?, direccion_responsable = ?, fecha_limite = ? WHERE id = ?");
+    $stmt->bind_param("sssi", $compromiso, $direccion, $fecha_limite, $id);
+    $stmt->execute();
+    $stmt->close();
 
-        // Registrar en la bitácora como "Editado"
-        $this->bitacora->registrar($id, $direccion, "Editado");
-    }
+    // Registrar en bitácora como "Editado" y con la dirección actualizada
+    $this->bitacora->registrar($id, $direccion, "Editado");
+}
+
 
     // Marca un compromiso como finalizado (se actualizará desde el avance final, si deseas)
     public function marcarFinalizado($id, $pdf_finalizacion) {
@@ -117,4 +121,19 @@ class Compromiso {
 
         $this->bitacora->registrar($id, $direccion, "Finalizado");
     }
+
+    // Método para determinar el estado del compromiso (finalizado, pendiente, vencido)
+public function calcularEstado($compromiso) {
+    // Recibe un array de la fila del compromiso
+    if (!empty($compromiso['finalizado']) && $compromiso['finalizado']) {
+        return 'finalizado';
+    }
+    $hoy = date('Y-m-d');
+    if (!empty($compromiso['fecha_limite']) && $hoy > $compromiso['fecha_limite']) {
+        return 'vencido';
+    }
+    return 'pendiente';
+}
+
+
 }

@@ -16,21 +16,47 @@
     </div>
 
     <?php if ($_SESSION['direccion'] === 'Administrador'): ?>
-      <div class="mb-3">
-        <label class="form-label">Asignar a Dirección Responsable</label>
-        <select name="direccion" class="form-select" required>
-          <option value="">Seleccione una dirección</option>
-          <?php foreach ($direcciones_responsables as $dir): ?>
-            <option value="<?= htmlspecialchars($dir) ?>"><?= htmlspecialchars($dir) ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
+      
+<div class="mb-3">
+  <label class="form-label">Dirección Responsable</label>
+  <select name="direccion" class="form-select" required>
+    <option value="">Seleccione...</option>
+    <?php foreach ($direcciones_responsables as $dir): ?>
+      <option value="<?= htmlspecialchars($dir['nombre']) ?>"
+        <?php
+          // Si estás editando y la dirección coincide, selecciónala
+          if (isset($compromiso) && $compromiso['direccion_responsable'] === $dir['nombre']) {
+            echo 'selected';
+          }
+        ?>
+      >
+        <?= htmlspecialchars($dir['nombre']) ?>
+      </option>
+    <?php endforeach; ?>
+  </select>
+</div>
+
     <?php else: ?>
       <div class="mb-3">
         <label class="form-label">Dirección</label>
         <input type="text" name="direccion" class="form-control" value="<?= htmlspecialchars($_SESSION['direccion']) ?>" readonly>
       </div>
     <?php endif; ?>
+
+
+<div class="mb-3">
+  <label class="form-label">Fecha límite</label>
+  <input
+    type="date"
+    name="fecha_limite"
+    class="form-control"
+    required
+    min="<?= date('Y-m-d') ?>"
+    value="<?= isset($_POST['fecha_limite']) ? htmlspecialchars($_POST['fecha_limite']) : '' ?>"
+  >
+</div>
+
+
 
     <button class="btn btn-success">Guardar</button>
     <a href="<?= BASE_URL ?>/?route=compromisos/index" class="btn btn-secondary ms-2">Cancelar</a>

@@ -33,3 +33,40 @@ CREATE TABLE IF NOT EXISTS bitacora (
     accion VARCHAR(50) NOT NULL,
     fecha DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Tabla de direcciones responsables
+CREATE TABLE IF NOT EXISTS direcciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Poblado inicial de direcciones (ajusta los nombres si deseas)
+INSERT INTO direcciones (nombre) VALUES
+('Administrador'),
+('Administrativa y Financiera'),
+('Buen Gobierno'),
+('Calidad Educativa'),
+('Cobertura Educativa'),
+('Despacho'),
+('Educación Superior'),
+('Infraestructura Educativa'),
+('Medios y Nuevas Tecnologías'),
+('Oficina Asesora de Planeación'),
+('Oficina Asesora Jurídica'),
+('Personal Docente'),
+('Subsecretaría'),
+('Transporte')
+ON DUPLICATE KEY UPDATE nombre = nombre;
+
+
+ALTER TABLE compromisos
+ADD COLUMN fecha_limite DATE AFTER fecha_creacion;
+
+ALTER DATABASE semaforo_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE direcciones CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE bitacora CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE avances CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE compromisos CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+
+
